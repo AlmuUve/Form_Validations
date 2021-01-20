@@ -27,9 +27,6 @@ window.onload = function() {
     let check = false;
     if (myCreditCardNum.length >= 12 && myCreditCardNum.length <= 19) {
       check = luhnChk(myCreditCardNum);
-    } else {
-      creditCard.classList.remove("border-success");
-      creditCard.classList.add("border-danger");
     }
     if (check == true) {
       creditCard.classList.remove("border-danger");
@@ -43,11 +40,7 @@ window.onload = function() {
   let cvc = document.querySelector("#cvc");
   cvc.addEventListener("focusout", () => {
     let myCvcNum = cvc.value;
-    if (
-      myCvcNum.length > 2 &&
-      myCvcNum.length < 5 &&
-      isNaN(myCvcNum) == false
-    ) {
+    if (parseInt(myCvcNum).toFixed() === myCvcNum) {
       cvc.classList.remove("border-danger");
       cvc.classList.add("border-success");
     } else {
@@ -59,11 +52,13 @@ window.onload = function() {
   let amount = document.querySelector("#amount");
   amount.addEventListener("focusout", () => {
     let myAmountNum = amount.value;
-    let convertToNum = this.parseInt(myAmountNum);
+    console.log(myAmountNum);
+    let convertedAmount = parseFloat(myAmountNum);
+    console.log(convertedAmount);
     if (
-      myAmountNum > 1000 &&
-      myAmountNum < Number.MAX_SAFE_INTEGER - 1 &&
-      isNaN(myAmountNum) == false
+      convertedAmount > 1000 &&
+      convertedAmount < Number.MAX_SAFE_INTEGER - 1 &&
+      parseFloat(convertedAmount.toFixed(2)) === convertedAmount
     ) {
       amount.classList.remove("border-danger");
       amount.classList.add("border-success");
@@ -72,17 +67,34 @@ window.onload = function() {
       amount.classList.add("border-danger");
     }
   });
-  //FIRST NAME
+  //FIRST NAME --- PASAR A FUNCION
   let firstName = document.querySelector("#firstName");
   firstName.addEventListener("focusout", () => {
     let myFirstName = firstName.value;
-    this.console.log(myFirstName);
-    if (myFirstName.length < 150 && myFirstName.length > 0) {
+    let myREGEXonlyletters = /^[a-zA-Z\s]*$/;
+    if (
+      myFirstName.length < 150 &&
+      myFirstName.length > 0 &&
+      myREGEXonlyletters.test(myFirstName)
+    ) {
+      //caracteres especiales
       firstName.classList.remove("border-danger");
       firstName.classList.add("border-success");
     } else {
       firstName.classList.remove("border-success");
       firstName.classList.add("border-danger");
+    }
+  });
+  //LASTNAME //ADD REGEX AND MAKE FUNCTION WITH FIRSTNAME
+  let lastName = document.querySelector("#lastName");
+  lastName.addEventListener("focusout", () => {
+    let mylastName = lastName.value;
+    if (mylastName.length < 150 && mylastName.length > 0) {
+      lastName.classList.remove("border-danger");
+      lastName.classList.add("border-success");
+    } else {
+      lastName.classList.remove("border-success");
+      lastName.classList.add("border-danger");
     }
   });
   //CITY
@@ -92,7 +104,9 @@ window.onload = function() {
     let myCity = city.value;
     let validCity = cities.includes(myCity.toLowerCase());
     if (validCity == true) {
-      city.value = myCity.charAt(0).toUpperCase() + myCity.slice(1);
+      city.value = myCity.toLowerCase();
+
+      city.value = city.value.charAt(0).toUpperCase() + city.value.slice(1);
       city.classList.remove("border-danger");
       city.classList.add("border-success");
     } else {
@@ -110,6 +124,21 @@ window.onload = function() {
     } else {
       community.classList.remove("border-danger");
       community.classList.add("border-success");
+    }
+  });
+  //POSTALCODE
+  let postalCode = document.querySelector("#postalCode");
+  let postalCodeList = ["09004", "09003"];
+  postalCode.addEventListener("focusout", () => {
+    let myPostalCode = postalCode.value;
+    console.log(myPostalCode);
+    let validPostalCode = postalCodeList.includes(myPostalCode);
+    if (validPostalCode == true) {
+      postalCode.classList.remove("border-danger");
+      postalCode.classList.add("border-success");
+    } else {
+      postalCode.classList.remove("border-success");
+      postalCode.classList.add("border-danger");
     }
   });
 };
