@@ -25,8 +25,13 @@ window.onload = function() {
   creditCard.addEventListener("focusout", () => {
     let myCreditCardNum = creditCard.value;
     let check = false;
-    if (myCreditCardNum.length > 12 && myCreditCardNum.length < 19) {
+    if (myCreditCardNum.length >= 12 && myCreditCardNum.length <= 19) {
       check = luhnChk(myCreditCardNum);
+    } else {
+      creditCard.classList.remove("border-success");
+      creditCard.classList.add("border-danger");
+    }
+    if (check == true) {
       creditCard.classList.remove("border-danger");
       creditCard.classList.add("border-success");
     } else {
@@ -65,6 +70,22 @@ window.onload = function() {
     } else {
       amount.classList.remove("border-success");
       amount.classList.add("border-danger");
+    }
+  });
+  //CITY
+  let city = document.querySelector("#city");
+  let cities = ["madrid", "barcelona"];
+  city.addEventListener("focusout", () => {
+    let myCity = city.value;
+    let validCity = cities.includes(myCity.toLowerCase());
+    if (validCity == true) {
+      city.value = myCity.toUpperCase();
+      console.log(city.value);
+      city.classList.remove("border-danger");
+      city.classList.add("border-success");
+    } else {
+      city.classList.remove("border-success");
+      city.classList.add("border-danger");
     }
   });
 };
