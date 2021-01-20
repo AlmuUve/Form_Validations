@@ -77,7 +77,6 @@ window.onload = function() {
       myFirstName.length > 0 &&
       myREGEXonlyletters.test(myFirstName)
     ) {
-      //caracteres especiales
       firstName.classList.remove("border-danger");
       firstName.classList.add("border-success");
     } else {
@@ -85,11 +84,16 @@ window.onload = function() {
       firstName.classList.add("border-danger");
     }
   });
-  //LASTNAME //ADD REGEX AND MAKE FUNCTION WITH FIRSTNAME
+  //LASTNAME // MAKE FUNCTION WITH FIRSTNAME
   let lastName = document.querySelector("#lastName");
+  let myREGEXonlyletters = /^[a-zA-Z\s]*$/;
   lastName.addEventListener("focusout", () => {
     let mylastName = lastName.value;
-    if (mylastName.length < 150 && mylastName.length > 0) {
+    if (
+      mylastName.length < 150 &&
+      mylastName.length > 0 &&
+      myREGEXonlyletters.test(myLastName)
+    ) {
       lastName.classList.remove("border-danger");
       lastName.classList.add("border-success");
     } else {
@@ -140,5 +144,41 @@ window.onload = function() {
       postalCode.classList.remove("border-success");
       postalCode.classList.add("border-danger");
     }
+  });
+  //MESSAGE
+  let message = document.querySelector("#message");
+  message.addEventListener("focusout", () => {
+    let myMessage = message.value;
+    let myREGEXmessage = /^[0-9A-Za-zñáéíóúÑÁÉÍÓÚüÜ;\.:'\s\-,!¡¿?)(&%#_çÇ$]/;
+    let insults = [
+      "mierda",
+      "imbecil",
+      "idiota",
+      "gilipollas",
+      "pene",
+      "puta",
+      "puto",
+      "gilipollas"
+    ];
+    let regex = "";
+
+    if (
+      myMessage.length < 500 &&
+      myMessage.length > 0 &&
+      myREGEXmessage.test(myMessage)
+    ) {
+      message.classList.remove("border-danger");
+      message.classList.add("border-success");
+    } else {
+      message.classList.remove("border-success");
+      message.classList.add("border-danger");
+    }
+    for (var i = 0; i < insults.length; i++) {
+      regex = new RegExp("(^|\\s)" + insults[i] + "($|(?=\\s))", "gi");
+      myMessage = myMessage.replace(regex, function($0, $1) {
+        return $1 + "#4@!@";
+      });
+    }
+    message.value = myMessage;
   });
 };
