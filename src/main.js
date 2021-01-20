@@ -72,6 +72,19 @@ window.onload = function() {
       amount.classList.add("border-danger");
     }
   });
+  //FIRST NAME
+  let firstName = document.querySelector("#firstName");
+  firstName.addEventListener("focusout", () => {
+    let myFirstName = firstName.value;
+    this.console.log(myFirstName);
+    if (myFirstName.length < 150 && myFirstName.length > 0) {
+      firstName.classList.remove("border-danger");
+      firstName.classList.add("border-success");
+    } else {
+      firstName.classList.remove("border-success");
+      firstName.classList.add("border-danger");
+    }
+  });
   //CITY
   let city = document.querySelector("#city");
   let cities = ["madrid", "barcelona"];
@@ -79,13 +92,24 @@ window.onload = function() {
     let myCity = city.value;
     let validCity = cities.includes(myCity.toLowerCase());
     if (validCity == true) {
-      city.value = myCity.toUpperCase();
-      console.log(city.value);
+      city.value = myCity.charAt(0).toUpperCase() + myCity.slice(1);
       city.classList.remove("border-danger");
       city.classList.add("border-success");
     } else {
       city.classList.remove("border-success");
       city.classList.add("border-danger");
+    }
+  });
+  //COMMUNITIES
+  let community = document.querySelector("#community");
+  community.addEventListener("focusout", () => {
+    let myCommunity = community.value;
+    if (myCommunity == 0) {
+      community.classList.remove("border-success");
+      community.classList.add("border-danger");
+    } else {
+      community.classList.remove("border-danger");
+      community.classList.add("border-success");
     }
   });
 };

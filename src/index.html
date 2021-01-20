@@ -78,7 +78,13 @@
             <div class="form-row font-weight-bold">
               <div class="col-6 mb-3">
                 <label for="fname">First Name</label>
-                <input type="text" class="form-control" name="fname" required />
+                <input
+                  id="firstName"
+                  type="text"
+                  class="form-control"
+                  name="fname"
+                  required
+                />
               </div>
               <div class="col-6 mb-3">
                 <label for="lname">Last Name</label>
@@ -98,8 +104,8 @@
               </div>
               <div class="col-3 mb-3">
                 <label for="state">State</label>
-                <select class="custom-select" name="state">
-                  <option disabled selected>Pick a state</option>
+                <select class="custom-select" name="state" id="community">
+                  <option disabled selected value="0">Pick a state</option>
                   <option value="1">Com Madrid</option>
                   <option value="2">Cataluña</option>
                   <option value="3">Asturias</option>
