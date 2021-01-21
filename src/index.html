@@ -25,9 +25,11 @@
         </div>
         <div class="card-body">
           <form action="" id="checkForm">
-            <div class="alert alert-danger font-weight-bold" role="alert">
-              Some fields are missing
-            </div>
+            <div
+              class="alert d-none font-weight-bold"
+              id="divMessage"
+              role="alert"
+            ></div>
             <div class="form-row font-weight-bold">
               <div class="col-5 mb-3">
                 <label for="ccn">Card #</label>
@@ -39,7 +41,6 @@
                   inputmode="numeric"
                   maxlength="19"
                   placeholder="XXXX-XXXX-XXXX-XXXX"
-                  required
                 />
               </div>
               <div class="col-3 mb-3">
@@ -53,7 +54,6 @@
                   minlength="3"
                   maxlength="4"
                   placeholder="0000"
-                  required
                 />
               </div>
               <div class="col-4 mb-3">
@@ -70,7 +70,6 @@
                     inputmode="numeric"
                     pattern="[0-9]+(\.[0-9][0-9]?)?"
                     placeholder="Amount"
-                    required
                   />
                 </div>
               </div>
@@ -83,7 +82,6 @@
                   type="text"
                   class="form-control"
                   name="fname"
-                  required
                 />
               </div>
               <div class="col-6 mb-3">
@@ -93,20 +91,13 @@
                   type="text"
                   class="form-control"
                   name="lname"
-                  required
                 />
               </div>
             </div>
             <div class="form-row font-weight-bold">
               <div class="col-6 mb-3">
                 <label for="city">City</label>
-                <input
-                  id="city"
-                  type="text"
-                  class="form-control"
-                  name="city"
-                  required
-                />
+                <input id="city" type="text" class="form-control" name="city" />
               </div>
               <div class="col-3 mb-3">
                 <label for="state">State</label>
@@ -127,7 +118,6 @@
                   inputmode="numeric"
                   minlength="3"
                   maxlength="5"
-                  required
                 />
               </div>
             </div>
@@ -192,6 +182,7 @@
                       name="cards"
                       id="card5"
                       value="option4"
+                      checked
                     />
                     <label class="form-check-label" for="card5"
                       ><i class="fab fa-cc-paypal text-white"></i
@@ -222,13 +213,19 @@
                 <p class="small text-muted">Max. 500 characters.</p>
               </div>
             </div>
+            <div class="card-footer d-flex justify-content-end">
+              <button type="reset" class="btn btn-secondary p-2 mr-2">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary p-2 mr-2"
+                id="buttonSubmit"
+              >
+                Send
+              </button>
+            </div>
           </form>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-          <button type="reset" class="btn btn-secondary p-2 mr-2">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-primary p-2 mr-2">Send</button>
         </div>
       </div>
     </div>
