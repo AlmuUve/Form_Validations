@@ -23,6 +23,7 @@ const submitCheck = document.querySelector("#checkForm");
 const submitMessage = document.querySelector("#divMessage");
 
 window.onload = function() {
+  let checkValueInput = false;
   checkCreditCard(creditCard);
   checkCVC(cvc);
   checkAmount(amount);
@@ -34,80 +35,46 @@ window.onload = function() {
   checkCommunity(community);
   checkPostalCode(postalCode);
 
-  //MESSAGE
-  message.addEventListener("focusout", () => {
-    let myMessage = message.value;
-    let myREGEXmessage = /^[0-9A-Za-zñáéíóúÑÁÉÍÓÚüÜ;\.:'\s\-,!¡¿?)(&%#_çÇ$]/;
-    let insults = [
-      "mierda",
-      "imbecil",
-      "idiota",
-      "gilipollas",
-      "pene",
-      "puta",
-      "puto",
-      "gilipollas"
-    ];
-    let regex = "";
+  checkMessage(message);
 
-    if (
-      myMessage.length < 500 &&
-      myMessage.length > 0 &&
-      myREGEXmessage.test(myMessage)
-    ) {
-      message.classList.remove("border-danger");
-      message.classList.add("border-success");
+  // SUBMIT
+  submitCheck.addEventListener("submit", function(event) {
+    event.preventDefault();
+    let allCheckInputs = document.querySelectorAll(
+      ".form-control, #message, #community"
+    );
+    checkValueInput = true;
+    for (let value of allCheckInputs) {
+      if (value.classList.contains("border-success")) {
+      } else {
+        checkValueInput = false;
+      }
+    }
+    if (checkValueInput == true) {
+      submitMessage.textContent = ""; //this cleans previous cards from the generate cards div
+      let createP = document.createElement("p");
+      let createMessage = document.createTextNode("We go it! Thanks.");
+      createP.appendChild(createMessage);
+      submitMessage.appendChild(createP);
+      submitMessage.classList.remove("alert-danger");
+      submitMessage.classList.remove("d-none");
+      submitMessage.classList.add("alert-success");
     } else {
-      message.classList.remove("border-success");
-      message.classList.add("border-danger");
+      submitMessage.textContent = ""; //this cleans previous cards from the generate cards div
+      let createPerror = document.createElement("p");
+      let createMessageerror = document.createTextNode(
+        "Some fields missing or incorrect!!"
+      );
+      createPerror.appendChild(createMessageerror);
+      submitMessage.appendChild(createPerror);
+      submitMessage.classList.remove("d-none");
+      submitMessage.classList.add("alert-danger");
     }
-    for (var i = 0; i < insults.length; i++) {
-      regex = new RegExp("(^|\\s)" + insults[i] + "($|(?=\\s))", "gi");
-      myMessage = myMessage.replace(regex, function($0, $1) {
-        return $1 + "#4@!@";
-      });
-    }
-    message.value = myMessage;
   });
 };
 
-console.log(submitCheck);
-
-// SUBMIT
-submitCheck.addEventListener("submit", function(event) {
-  event.preventDefault();
-  let allCheckInputs = document.querySelectorAll(
-    ".form-control, #message, #community"
-  ); ///re-do selector
-  let checkValueInput = false;
-  for (let value of allCheckInputs) {
-    if (value.classList.contains("border-success")) {
-      checkValueInput = true;
-    } else {
-      checkValueInput = false;
-    }
-  }
-  if (checkValueInput == true) {
-    var createP = document.createElement("p");
-    var createMessage = document.createTextNode("Lo conseguiste");
-    createP.appendChild(createMessage); // Tengo que agregar contenido al h1
-    submitMessage.appendChild(createP);
-    submitMessage.classList.remove("d-none");
-    submitMessage.classList.add("alert-success");
-    console.log("holaaaa");
-  } else {
-    var createPerror = document.createElement("p");
-    var createMessageerror = document.createTextNode("No Lo conseguiste");
-    createPerror.appendChild(createMessageerror); // Tengo que agregar contenido al h1
-    submitMessage.appendChild(createPerror);
-    submitMessage.classList.remove("d-none");
-    submitMessage.classList.add("alert-danger");
-    console.log("hola");
-  }
-});
-
 //CREDIT CARD
-function checkCreditCard(input) {
+const checkCreditCard = input => {
   input.addEventListener("focusout", () => {
     let check =
       luhnChk(input.value) &&
@@ -115,16 +82,30 @@ function checkCreditCard(input) {
       input.value.length <= 19;
     getC(input, check);
   });
-}
+};
+const luhnChk = (function(arr) {
+  //this a Luhn algorithm to check credit card
+  return function(ccNum) {
+    let length = ccNum.length,
+      bit = 1,
+      sum = 0,
+      value;
+    while (length) {
+      value = parseInt(ccNum.charAt(--length), 10);
+      sum += (bit ^= 1) ? arr[value] : value;
+    }
+    return sum && sum % 10 === 0;
+  };
+})([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]);
 //CVC
-function checkCVC(input) {
+const checkCVC = input => {
   input.addEventListener("focusout", () => {
     let check = parseInt(input.value).toFixed() === input.value;
     getC(input, check);
   });
-}
+};
 //AMOUNT
-function checkAmount(input) {
+const checkAmount = input => {
   input.addEventListener("focusout", () => {
     let check =
       parseFloat(input.value) > 1000 &&
@@ -133,25 +114,26 @@ function checkAmount(input) {
         parseFloat(input.value);
     getC(input, check);
   });
-}
+};
 //FIRST AND LAST NAME
-function checkFirstAndLastName(input) {
+const checkFirstAndLastName = input => {
   input.addEventListener("focusout", () => {
-    let myREGEXonlyletters = /^[a-zA-Z\s]*$/;
+    let myREGEXonlyletters = /^[a-zA-Z\s]*$/; // only letters
     let check =
       input.value.length > 0 &&
       input.value.length < 150 &&
       myREGEXonlyletters.test(input.value);
     getC(input, check);
   });
-}
+};
 //CITY
-function checkCity(input) {
+const checkCity = input => {
   let cities = ["madrid", "barcelona"];
   input.addEventListener("focusout", () => {
     let myCity = input.value;
     let validCity = cities.includes(myCity.toLowerCase());
     if (validCity == true) {
+      // we fix input of city to show it with first letter capitalized and the rest in lowercase
       input.value = myCity.toLowerCase();
 
       input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
@@ -162,46 +144,58 @@ function checkCity(input) {
       input.classList.add("border-danger");
     }
   });
-}
+};
 //COMMUNITY
-function checkCommunity(input) {
+const checkCommunity = input => {
   input.addEventListener("focusout", () => {
     let check = input.value != 0;
     getC(input, check);
   });
-}
+};
 //POSTALCODE
-function checkPostalCode(input) {
+const checkPostalCode = input => {
   let postalCodeList = ["09004", "09003"];
   input.addEventListener("focusout", () => {
     let check = postalCodeList.includes(input.value);
     getC(input, check);
   });
-}
+};
+//MESSAGE
+const checkMessage = input => {
+  input.addEventListener("focusout", () => {
+    let insults = [
+      "mierda",
+      "imbecil",
+      "idiota",
+      "gilipollas",
+      "pene",
+      "puta",
+      "puto",
+      "gilipollas"
+    ];
 
+    let check = input.value.length < 500 && input.value.length > 0;
+    getC(input, check);
+    let regex = "";
+    for (let i = 0; i < insults.length; i++) {
+      // this loop changes bad words into special characters
+      regex = new RegExp("(^|\\s)" + insults[i] + "($|(?=\\s))", "gi");
+      input.value = input.value.replace(regex, function($0, $1) {
+        return $1 + "#4@!@";
+      });
+    }
+    message.value = input.value;
+  });
+};
 // GET COLORS
-function getC(input, boolean) {
+const getC = (input, boolean) => {
   if (boolean === true) {
-    input.classList.remove("border-danger");
-    input.classList.add("border-success");
+    input.classList.remove("is-invalid");
+    input.classList.add("is-valid");
     return true;
   } else {
-    input.classList.remove("border-success");
-    input.classList.add("border-danger");
+    input.classList.remove("is-valid");
+    input.classList.add("is-invalid");
     return false;
   }
-}
-
-const luhnChk = (function(arr) {
-  return function(ccNum) {
-    var len = ccNum.length,
-      bit = 1,
-      sum = 0,
-      val;
-    while (len) {
-      val = parseInt(ccNum.charAt(--len), 10);
-      sum += (bit ^= 1) ? arr[val] : val;
-    }
-    return sum && sum % 10 === 0;
-  };
-})([0, 2, 4, 6, 8, 1, 3, 5, 7, 9]);
+};
