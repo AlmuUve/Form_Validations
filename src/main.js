@@ -23,7 +23,7 @@ const submitCheck = document.querySelector("#checkForm");
 const submitMessage = document.querySelector("#divMessage");
 
 window.onload = function() {
-  let checkValueInput = false;
+  //  let checkValueInput = false;
   checkCreditCard(creditCard);
   checkCVC(cvc);
   checkAmount(amount);
@@ -43,30 +43,27 @@ window.onload = function() {
     let allCheckInputs = document.querySelectorAll(
       ".form-control, #message, #community"
     );
-    checkValueInput = true;
+    let checkValueInput = true;
     for (let value of allCheckInputs) {
-      if (value.classList.contains("border-success")) {
-      } else {
-        checkValueInput = false;
-      }
+      checkValueInput &= value.classList.contains("is-valid");
     }
-    if (checkValueInput == true) {
+    if (checkValueInput) {
       submitMessage.textContent = ""; //this cleans previous cards from the generate cards div
-      let createP = document.createElement("p");
+      let createMessageSuccess = document.createElement("p");
       let createMessage = document.createTextNode("We go it! Thanks.");
-      createP.appendChild(createMessage);
-      submitMessage.appendChild(createP);
+      createMessageSuccess.appendChild(createMessage);
+      submitMessage.appendChild(createMessageSuccess);
       submitMessage.classList.remove("alert-danger");
       submitMessage.classList.remove("d-none");
       submitMessage.classList.add("alert-success");
     } else {
       submitMessage.textContent = ""; //this cleans previous cards from the generate cards div
-      let createPerror = document.createElement("p");
-      let createMessageerror = document.createTextNode(
+      let createMessageError = document.createElement("p");
+      let createMessage = document.createTextNode(
         "Some fields missing or incorrect!!"
       );
-      createPerror.appendChild(createMessageerror);
-      submitMessage.appendChild(createPerror);
+      createMessageError.appendChild(createMessage);
+      submitMessage.appendChild(createMessageError);
       submitMessage.classList.remove("d-none");
       submitMessage.classList.add("alert-danger");
     }
@@ -137,11 +134,11 @@ const checkCity = input => {
       input.value = myCity.toLowerCase();
 
       input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
-      input.classList.remove("border-danger");
-      input.classList.add("border-success");
+      input.classList.remove("is-invalid");
+      input.classList.add("is-valid");
     } else {
-      input.classList.remove("border-success");
-      input.classList.add("border-danger");
+      input.classList.remove("is-valid");
+      input.classList.add("is-invalid");
     }
   });
 };
